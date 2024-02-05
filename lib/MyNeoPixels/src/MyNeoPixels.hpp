@@ -9,7 +9,6 @@
 
 
 /* MY */
-#include "MyNeoPixelsUserConfigFile.h"
 
 
 
@@ -21,39 +20,6 @@
 
 
 /* MACROS */
-
-
-
-/*
-TRASHBIN:
-
-// Define Reset time in µs.
-#if !defined(ws2812_resettime)
-#define ws2812_resettime    300
-#endif
-
-// Define I/O pin
-#if !defined(ws2812_port)
-#define ws2812_port B   // Data port
-#endif
-#if !defined(ws2812_pin)
-#define ws2812_pin  0   // Data out pin
-#endif
-// Internal defines
-
-#if !defined(CONCAT)
-#define CONCAT(a, b)            a ## b
-#endif
-
-#if !defined(CONCAT_EXP)
-#define CONCAT_EXP(a, b)   CONCAT(a, b)
-#endif
-
-#define ws2812_PORTREG  CONCAT_EXP(PORT,ws2812_port)
-#define ws2812_DDRREG   CONCAT_EXP(DDR,ws2812_port)
-
-
-*/
 
 
 
@@ -100,21 +66,17 @@ class MyWS2812B {
 
         /* CONSTANTS */
 
-        #define TIME_RESET 300 // WS2812 and clones only need 50 µs
+        #define TIME_RESET 50 // WS2812 and clones only need 50 µs
+
 
         /* DATA */
 
         volatile uint8_t* registerPtrPORT; // Data port 
-        uint16_t* registerPtrMemAddrPort;
+        uint8_t* registerPtrMemAddrPort;
         volatile uint8_t* registerPtrDDR; // Data port 
         uint8_t pin;  // Data out pin
         uint8_t maxNumberOfLeds {255};
-
         cRGB* color;
-
-
-
-
 
 
         /* SETTER */
@@ -125,59 +87,28 @@ class MyWS2812B {
         void inline ws2812_setleds (struct cRGB  *ledArray, uint16_t numberOfLeds);
 
 
-
-
-
     protected:
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     public:
 
         /* CONSTRUCTOR */
-        MyWS2812B(volatile uint8_t& PORTx, uint16_t sfrMemAddrPORTx, volatile uint8_t& DDRx, uint8_t numberPin, uint8_t maxNumberLeds);
+
+        MyWS2812B(volatile uint8_t& PORTx, uint8_t* sfrMemAddrPORTx, volatile uint8_t& DDRx, uint8_t numberPin, uint8_t maxNumberLeds);
 
 
         /* DESTRUCTOR */
+
         ~MyWS2812B();
 
 
-        /* set */
+        /* SETTER */
 
         void setColor(uint8_t led, uint8_t r, uint8_t g, uint8_t b);
         void show();
         void clearAll();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
 };
-
-
-
-
 
 #endif
 
