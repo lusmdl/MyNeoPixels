@@ -1,11 +1,10 @@
 /**
- * @file LedCycle.cpp
- * @brief Example program demonstrating the usage of the MyWS2812B library to control WS2812B LEDs.
- * @author lusmdl
- * @date 05.02.2024
+ * @file    ExampleMain.cpp
+ * @brief   Example program demonstrating the usage of the MyWS2812B library to control WS2812B LEDs.
+ * @author  lusmdl
+ * @date    05.02.2024
  * 
- * This example initializes a WS2812B strip with 3 LEDs connected to PORTD (PIN6) of the microcontroller.
- * It cycles through red, green, and blue colors on the LEDs in a loop with a delay of 500ms between changes.
+ * This is an example.
  */
 
 #include <MyNeoPixels.hpp>
