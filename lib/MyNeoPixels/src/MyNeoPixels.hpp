@@ -94,7 +94,7 @@ class MyWS2812B {
 
         /* CONSTRUCTOR */
 
-        MyWS2812B(volatile uint8_t& PORTx, uint8_t* sfrMemAddrPORTx, volatile uint8_t& DDRx, uint8_t numberPin, uint8_t maxNumberLeds);
+        MyWS2812B(volatile uint8_t& DDRx, volatile uint8_t& PORTx, uint8_t* sfrMemAddrPORTx, uint8_t numberPin, uint8_t maxNumberLeds);
 
 
         /* DESTRUCTOR */
