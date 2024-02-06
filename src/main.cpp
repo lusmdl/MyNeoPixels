@@ -10,7 +10,7 @@
 #include <MyNeoPixels.hpp>
 
 
-MyWS2812B leds(PORTD, (uint8_t*) _SFR_MEM_ADDR(PORTD), DDRD, PD6, 3);
+MyWS2812B leds(DDRD, PORTD, (uint8_t*) _SFR_MEM_ADDR(PORTD), PD6, 3);
 
 struct cRGB led[2];
 
