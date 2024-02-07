@@ -48,7 +48,7 @@ In the `platformio.ini` file, you can configure various settings such as fuse bi
 platform = atmelavr
 framework = arduino
 board = ATmega328P
-board_build.f_cpu = 8000000UL
+board_build.f_cpu = 8000000
 
 upload_protocol = custom
 upload_port = usb
