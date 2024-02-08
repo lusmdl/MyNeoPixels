@@ -79,7 +79,7 @@ class MyWS2812B {
         /* CONSTANTS */
 
         #define TIME_RESET 50 // WS2812 and clones only need 50 µs
-        static const uint8_t dimCurve[256];
+        static const uint8_t dimCurve[256]; // Brightness values, adapted to the actual brightness curve from 0 to 255
 
         /* DATA */
 
@@ -131,9 +131,10 @@ class MyWS2812B {
         void clearColor(uint8_t led);
 
         /* GETTER */
+
         cRGB getColor(uint8_t led);
         uint8_t getMaxNumPixels();
-        
+ 
 };
 
 #endif

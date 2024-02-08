@@ -23,20 +23,33 @@ const uint8_t MyWS2812B ::dimCurve[256] = {
 }; 
 
 
+
+
+
+
+
+
+
 /**
- * Constructor for MyWS2812B class.
- * 
- * Initializes the MyWS2812B object with the given parameters.
+ * @brief Constructor for the MyWS2812B class.
+ *        Initializes the MyWS2812B object with the given parameters.
+ *        Initializes the data port, data port memory address, data direction register,
+ *        data out pin, and the color array with the maximum number of LEDs.
  * 
  * @param PORTx The data port for the LEDs.
  * @param sfrMemAddrPORTx The memory address of the data port.
  * @param DDRx The data direction register for the LEDs.
  * @param numberPin The data out pin for the LEDs.
- * @param maxNumberLeds The maximum number of LEDs that can be controlled.
+ * @param maxNumberLeds The maximum number of LEDs that can be controlled. (Default: 255)
  * 
- * Initializes the data port, data port memory address, data direction register,
- * data out pin, and the color array with the maximum number of LEDs.
+ * @warning This method may not handle unexpected errors and could be potentially unsafe in some scenarios.
+ * 
+ * @note Ensure that the correct memory addresses and port settings are provided to avoid unexpected behavior.
+ * 
+ * @example 
+ * MyWS2812B leds(PORTA, &PORTA, DDRB, 3);
  */
+
 MyWS2812B ::MyWS2812B(volatile uint8_t& DDRx, volatile uint8_t& PORTx, uint8_t* sfrMemAddrPORTx, uint8_t numberPin, uint8_t maxNumberLeds = 255, rgbCode code = GRB) : registerPtrPORT {&PORTx}, registerPtrMemAddrPort(sfrMemAddrPORTx), registerPtrDDR {&DDRx}, pin {numberPin}, maxNumberOfLeds {maxNumberLeds}, pixelCode {code} {
 
   color = new cRGB[maxNumberOfLeds]; // Initialisiere das Array mit der maximalen Anzahl von LEDs.
@@ -47,18 +60,21 @@ MyWS2812B ::MyWS2812B(volatile uint8_t& DDRx, volatile uint8_t& PORTx, uint8_t* 
   {
     brightness[i] = 255;
   }
-  
-
 }
 
 
 
 /**
- * Destructor for MyWS2812B class.
+ * @brief Destructor for MyWS2812B class.
  * 
- * Frees the memory allocated for the color array when the object is deleted.
+ * @warning This method may cause unexpected behavior and should be used with caution.
  * 
- * Deletes the color array to free the memory when the object is deleted.
+ * @note Frees the memory allocated for the color array when the object is deleted.
+ * 
+ * @example
+ * MyWS2812B myLEDs;
+ * // ...
+ * delete &myLEDs; 
  */
 MyWS2812B ::~MyWS2812B() {
 
@@ -80,12 +96,19 @@ MyWS2812B ::~MyWS2812B() {
 
 
 /**
- * Sets the given LED array for standard RGB.
+ * @brief Sets the given LED array with standard RGB values.
  * 
  * @param ledArray The array of cRGB values for the LEDs.
  * @param numberOfLeds The number of LEDs to control.
  * 
- * Sets the given LED array for standard RGB by calling ws2812_setleds_pin() with the data out pin for the LEDs.
+ * @warning This method may result in unexpected behavior and should be used with caution.
+ * 
+ * @note The function sets the LED array using ws2812_setleds_pin() with the data output pin for the LEDs.
+ * 
+ * @example 
+ * MyWS2812B ws2812;
+ * struct cRGB leds[2] = {{255, 0, 0}, {0, 255, 0}}; 
+ * ws2812.ws2812_setleds(leds, 2);
  */
 void inline MyWS2812B ::ws2812_setleds(struct cRGB  *ledArray, uint16_t numberOfLeds)
 {
@@ -95,14 +118,19 @@ void inline MyWS2812B ::ws2812_setleds(struct cRGB  *ledArray, uint16_t numberOf
 
 
 /**
- * Sets the LED array with a specified data out pin mask.
+ * @brief Sets the LED array with a specified data out pin mask.
  * 
  * @param ledarray The array of cRGB values for the LEDs.
  * @param leds The number of LEDs to control.
  * @param pinmask The pin mask to specify the data out pin for the LEDs.
  * 
- * Calls ws2812_sendarray_mask() with the LED array, number of LEDs multiplied by 3 (for RGB values), and the pin mask.
+ * @warning This method may have unpredictable behavior and is considered unsafe in certain scenarios.
+ * 
+ * @note Calls ws2812_sendarray_mask() with the LED array, number of LEDs multiplied by 3 (for RGB values), and the pin mask.
  * Delays for a reset time after sending the data.
+ * 
+ * @example 
+ * ws2812_setleds_pin(myLedArray, 8, 0xFF);
  */
 void inline MyWS2812B ::ws2812_setleds_pin(struct cRGB *ledarray, uint16_t leds, uint8_t pinmask)
 {
@@ -110,20 +138,40 @@ void inline MyWS2812B ::ws2812_setleds_pin(struct cRGB *ledarray, uint16_t leds,
   _delay_us(TIME_RESET);
 }
 
+
+
+
+
+
+
+
+
+
+
+
 /**
- * This routine writes an array of bytes with RGB values to the Dataout pin
- * using the fast 800kHz clockless WS2811/2812 protocol.
- * Sends an array of RGB values to the WS2812B LEDs.
+ * @brief This method sends an array of RGB values to WS2812B LEDs using the fast 800kHz clockless WS2811/2812 protocol.
  * 
  * @param data The array of RGB values to send to the LED.
  * @param datlen The length of the data array.
  * 
- * Calls ws2812_sendarray_mask() with the data array, data array length, and a pin mask for the data out pin.
+ * @warning This method may have unexpected behavior in certain situations and is considered unsafe in some cases.
+ * 
+ * @note Ensure that the data array and length are correctly formatted before calling this method.
+ * 
+ * @example 
+ * MyWS2812B ws2812b;
+ * uint8_t rgbData[] = {255, 0, 0}; // Red color
+ * ws2812b.ws2812_sendarray(rgbData, sizeof(rgbData));
  */
 void MyWS2812B ::ws2812_sendarray(uint8_t *data,uint16_t datlen)
 {
   ws2812_sendarray_mask(data,datlen,1 << (pin));
 }
+
+
+
+
 
 
 
@@ -178,6 +226,7 @@ void MyWS2812B ::ws2812_sendarray(uint8_t *data,uint16_t datlen)
 
 // The only critical timing parameter is the minimum pulse length of the "0"
 // Warn or throw error if this timing can not be met with current F_CPU settings.
+
 #define w_lowtime ((w1_nops+w_fixedlow)*1000000)/(F_CPU/1000)
 #if w_lowtime>550
    #error "Light_ws2812: Sorry, the clock speed is too low. Did you set F_CPU correctly?"
@@ -210,14 +259,24 @@ void MyWS2812B ::ws2812_sendarray(uint8_t *data,uint16_t datlen)
 
 
 
+
+
+
+
+
 /**
- * Sends an array of bytes with RGB values using the WS2811/2812 protocol with a specified pin mask.
+ * @brief Sends an array of bytes with RGB values using the WS2811/2812 protocol with a specified pin mask.
  * 
  * @param data The array of data bytes.
  * @param datlen The length of the data array.
  * @param maskhi The pin mask for the data output pin.
  * 
- * Sends the data array using inline assembly code to control the timing and signal for each byte of data.
+ * @warning This method uses inline assembly code to control the timing and signal for each byte of data which can lead to unexpected behavior and potential vulnerabilities.
+ * 
+ * @note Ensure proper understanding of the WS2811/2812 protocol and the specific hardware before using this method.
+ * 
+ * @example 
+ * MyWS2812B::ws2812_sendarray_mask(dataArray, dataLength, maskValue);
  */
 void inline MyWS2812B ::ws2812_sendarray_mask(uint8_t *data,uint16_t datlen,uint8_t maskhi)
 {
@@ -329,14 +388,20 @@ w_nop16
 
 
 /**
- * Sets the color for a specific LED.
+ * @brief Sets the color of a specific LED.
  * 
- * @param led The index of the LED to set the color for.
+ * @param led The index of the LED for which to set the color.
  * @param r The red value of the color (0-255).
  * @param g The green value of the color (0-255).
  * @param b The blue value of the color (0-255).
  * 
- * Sets the color of the specified LED in the color array.
+ * @warning This method may produce unexpected results in certain cases and is considered unsafe.
+ * 
+ * @note Make sure to properly handle input values within the 0-255 range for RGB color values.
+ * 
+ * @example 
+ * MyWS2812B.setColor(2, 255, 0, 0);
+ * // Sets the color of the 3rd LED to pure red.
  */
 void MyWS2812B ::setColor(uint8_t led, uint8_t r, uint8_t g, uint8_t b) {
 
@@ -351,6 +416,21 @@ void MyWS2812B ::setColor(uint8_t led, uint8_t r, uint8_t g, uint8_t b) {
 
 
 
+
+
+/**
+ * @brief Sets the color of a specific LED in a MyWS2812B strip based on the given mode.
+ * 
+ * @param led The index of the LED to set the color for
+ * @param mode The color mode to apply (warm white or default)
+ * 
+ * @warning This method may produce unexpected results and is considered unsafe in certain scenarios.
+ * @note If an unsupported mode is provided, the default color (255, 255, 255) will be used.
+ * 
+ * @example 
+ * MyWS2812B strip;
+ * strip.setColor(2, warmWhite);
+ */
 void MyWS2812B ::setColor(uint8_t led, colorModes mode) {
 
   switch (mode)
@@ -369,6 +449,24 @@ void MyWS2812B ::setColor(uint8_t led, colorModes mode) {
 }
 
 
+
+
+
+
+/**
+ * @brief Sets the color of all the WS2812B LEDs to the specified color mode.
+ * 
+ * @param mode The color mode to set for all LEDs
+ * 
+ * @warning This method might behave unexpectedly if the number of LEDs exceeds the maximum allowed.
+ * 
+ * @note This method sets the color of all LEDs in the strip to the specified color mode.
+ * 
+ * @example 
+ * 
+ * // Set all LEDs to red color
+ * MyWS2812B.setColor(RED);
+ */
 void MyWS2812B ::setColor(colorModes mode) {
 
   for (int i = 0; i < maxNumberOfLeds; i++)
@@ -380,7 +478,20 @@ void MyWS2812B ::setColor(colorModes mode) {
 }
 
 
-
+/**
+ * @brief Sets the color of all WS2812B LEDs to the specified RGB values.
+ * 
+ * @param r The red component value (0-255)
+ * @param g The green component value (0-255)
+ * @param b The blue component value (0-255)
+ * 
+ * @warning This method may be unsafe in certain cases where unexpected behavior could occur.
+ * 
+ * @note This method sets the same RGB color for all LEDs in the strip.
+ * 
+ * @example 
+ * MyWS2812B.setColor(255, 0, 0);
+ */
 void MyWS2812B ::setColor(uint8_t r, uint8_t g, uint8_t b) {
 
   for (int i = 0; i < maxNumberOfLeds; i++)
@@ -394,10 +505,15 @@ void MyWS2812B ::setColor(uint8_t r, uint8_t g, uint8_t b) {
 
 
 /**
- * Sends the color data for all LEDs to the WS2812B strip.
+ * @brief Sends the color data for all LEDs to the WS2812B strip.
  * 
- * Sends the color data for all LEDs in the color array to the WS2812B strip using the ws2812_setleds() function
- * from the Adafruit_NeoPixel library.
+ * @warning This method may be insecure and unexpected behavior could occur.
+ * 
+ * @note This method uses the ws2812_setleds() function.
+ * 
+ * @example 
+ * MyWS2812B strip;
+ * strip.show();
  */
 void MyWS2812B ::show() {
 
@@ -407,9 +523,15 @@ void MyWS2812B ::show() {
 
 
 /**
- * Clears the color data for all LEDs.
+ * @brief Clears the color data for all LEDs.
  * 
- * Sets the color of all LEDs in the color array to black (RGB values set to 0) effectively clearing all color data.
+ * @warning This method sets the color of all LEDs to black (RGB values set to 0), 
+ * clearing all color data. It can potentially lead to unexpected behavior in certain situations.
+ * 
+ * @note Use with caution as it will clear all existing color data for the LEDs.
+ * 
+ * @example 
+ * MyWS2812B.clearColor();
  */
 void MyWS2812B ::clearColor() {
 
@@ -419,34 +541,50 @@ void MyWS2812B ::clearColor() {
   }
 }
 
+
+
+
+
+
 /**
- * Clears the color data for one LED.
+ * @brief Clears the color data for a specific LED by setting its RGB values to 0.
  * 
- * Sets the color of all LEDs in the color array to black (RGB values set to 0) effectively clearing all color data.
+ * @param led The index of the LED in the array to clear the color data for.
+ * 
+ * @warning This method may behave unexpectedly if the LED index is out of bounds.
+ * 
+ * @note Calling this method will reset the RGB values of the specified LED to black.
+ * 
+ * @example
+ * MyWS2812B myLED;
+ * myLED.clearColor(2);
  */
 void MyWS2812B ::clearColor(uint8_t led) {
 
-  
   color[led].r = 0;
   color[led].g = 0;
   color[led].b = 0;
-
 }
 
 
 
 
 /**
+ * @brief Calculates the corrected brightness of a specific LED color component based on the brightness level and LED configuration.
  * 
+ * @param bright The brightness level of the LED (0-255)
+ * @param led The index of the LED color component (0-2)
  * 
+ * @return The calculated corrected brightness percentage for the LED color component
  * 
+ * @warning This method may encounter unexpected behavior and is considered unsafe in certain scenarios.
  * 
+ * @note The correct LED color component calculation is done based on the pixel code configuration.
  * 
- * 
- * 
- * 
- * 
-*/
+ * @example 
+ * double brightness = MyWS2812B.calculateBrightness(150, 1);
+ * // Calculate corrected brightness for LED component 1 with brightness level 150
+ */
 double MyWS2812B ::calculateBrightness (uint8_t bright, uint8_t led) {
 
   double percent = static_cast<double>(dimCurve[bright]) / 255;
@@ -510,7 +648,19 @@ double MyWS2812B ::calculateBrightness (uint8_t bright, uint8_t led) {
 
 
 
-
+/**
+ * @brief Get the color of a specific LED in the WS2812B strip.
+ * 
+ * @param led The index of the LED whose color is to be retrieved
+ * @return The color of the specified LED
+ * 
+ * @warning This method may lead to unexpected behavior if the LED index is out of bounds.
+ * @note Ensure that the LED index provided is within the valid range of LEDs.
+ * 
+ * @example 
+ * cRGB myColor = getColor(3);
+ * displayColor(myColor); // Example output method
+ */
 cRGB MyWS2812B ::getColor(uint8_t led) {
 
   return color[led];
@@ -518,6 +668,22 @@ cRGB MyWS2812B ::getColor(uint8_t led) {
 }
 
 
+
+
+
+
+/**
+ * @brief Sets the brightness value for all LEDs in the strip.
+ * 
+ * @param n The brightness value to be set for all LEDs (0-255).
+ * 
+ * @warning This method may not handle unexpected inputs and could lead to undefined behavior.
+ * 
+ * @note The brightness value is applied to all LEDs in the strip.
+ * 
+ * @example 
+ * myStrip.setBrightness(100);
+ */
 void MyWS2812B ::setBrightness(uint8_t n) {
 
   for (uint16_t led = 0; led < maxNumberOfLeds; led++)
@@ -525,12 +691,27 @@ void MyWS2812B ::setBrightness(uint8_t n) {
     brightness[led] = n;
     calculateBrightness(n, led);
   }
-  
-  
-  
 }
 
 
+
+
+
+
+/**
+ * @brief Sets the brightness of a specific WS2812B LED.
+ * 
+ * @param n The brightness value to set (0-255).
+ * @param led The index of the LED to set the brightness for.
+ * 
+ * @warning This method may behave unexpectedly and be unsafe in certain conditions.
+ * 
+ * @note Make sure to check the range of the brightness value before calling this method.
+ * 
+ * @example 
+ * MyWS2812B ws2812b;
+ * ws2812b.setBrightness(200, 1);
+ */
 void MyWS2812B ::setBrightness(uint8_t n, uint8_t led) {
 
   brightness[led] = n;
@@ -540,6 +721,24 @@ void MyWS2812B ::setBrightness(uint8_t n, uint8_t led) {
 
 
 
+
+
+
+
+/**
+ * @brief This method retrieves the maximum number of pixels supported by the WS2812B LED strip.
+ * 
+ * @return The maximum number of pixels supported
+ * 
+ * @warning This method may be unsafe in certain situations where the maximum number of pixels is exceeded.
+ * 
+ * @note Please ensure the maximum number of pixels is within the specified limit to avoid unexpected behavior.
+ * 
+ * @example
+ * uint8_t maxPixels = myWS2812B.getMaxNumPixels();
+ * Serial.print("Maximum number of pixels: ");
+ * Serial.println(maxPixels);
+ */
 uint8_t MyWS2812B ::getMaxNumPixels() {
   return maxNumberOfLeds;
 }
