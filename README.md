@@ -36,7 +36,7 @@ MyWS2812B leds(DDRD, PORTD, (uint8_t*) _SFR_MEM_ADDR(PORTD), PD6, 3);
 ```cpp
 leds.clearColor();
 leds.setBrightness(255);
-leds.setColor(1, 255,0,0);
+leds.setColor(1, red);
 leds.show();
 ```
 
