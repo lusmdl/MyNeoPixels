@@ -29,14 +29,15 @@ The library is located in the `/lib` folder. Simply copy `/lib/MyNeoPixels` to y
 
 2. Initialize the LEDs by creating an object:
 ```cpp
-MyWS2812B leds(DDRD, PORTD, (uint8_t*) _SFR_MEM_ADDR(PORTD), PD6, 3);;
+MyWS2812B leds(DDRD, PORTD, (uint8_t*) _SFR_MEM_ADDR(PORTD), PD6, 3);
 ```
 
 3. Use the provided functions to control the LED color:
 ```cpp
-leds.clearAll();
+leds.clearColor();
+leds.setBrightness(255);
+leds.setColor(1, 255,0,0);
 leds.show();
-leds.setColor(1, 255, 0 , 0);
 ```
 
 ## PlatformIO
