@@ -514,3 +514,9 @@ void MyWS2812B ::setBrightness(uint8_t n, uint8_t led) {
   calculateBrightness(n, led);
 }
 
+
+
+
+uint8_t MyWS2812B ::getMaxNumPixels() {
+  return maxNumberOfLeds;
+}

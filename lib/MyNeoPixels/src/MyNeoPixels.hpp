@@ -130,6 +130,7 @@ class MyWS2812B {
 
         /* GETTER */
         cRGB getColor(uint8_t led);
+        uint8_t getMaxNumPixels();
         
 };
 
