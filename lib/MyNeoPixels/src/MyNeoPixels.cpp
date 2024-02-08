@@ -37,7 +37,7 @@ const uint8_t MyWS2812B ::dimCurve[256] = {
  * Initializes the data port, data port memory address, data direction register,
  * data out pin, and the color array with the maximum number of LEDs.
  */
-MyWS2812B ::MyWS2812B(volatile uint8_t& DDRx, volatile uint8_t& PORTx, uint8_t* sfrMemAddrPORTx, uint8_t numberPin, uint8_t maxNumberLeds) : registerPtrPORT {&PORTx}, registerPtrMemAddrPort(sfrMemAddrPORTx), registerPtrDDR {&DDRx}, pin {numberPin}, maxNumberOfLeds {maxNumberLeds} {
+MyWS2812B ::MyWS2812B(volatile uint8_t& DDRx, volatile uint8_t& PORTx, uint8_t* sfrMemAddrPORTx, uint8_t numberPin, uint8_t maxNumberLeds = 255, rgbCode code = GRB) : registerPtrPORT {&PORTx}, registerPtrMemAddrPort(sfrMemAddrPORTx), registerPtrDDR {&DDRx}, pin {numberPin}, maxNumberOfLeds {maxNumberLeds}, pixelCode {code} {
 
   color = new cRGB[maxNumberOfLeds]; // Initialisiere das Array mit der maximalen Anzahl von LEDs.
   correctColor = new cRGB[maxNumberOfLeds]; // Initialisiere das Array mit der maximalen Anzahl von LEDs.
@@ -428,9 +428,58 @@ double MyWS2812B ::calculateBrightness (uint8_t bright, uint8_t led) {
 
   double percent = static_cast<double>(dimCurve[bright]) / 255;
 
-  correctColor[led].r = color[led].r * percent;
-  correctColor[led].g = color[led].g * percent;
-  correctColor[led].b = color[led].b * percent;
+  switch (pixelCode)
+  {
+  case RGB:
+
+    correctColor[led].r = color[led].r * percent;
+    correctColor[led].g = color[led].g * percent;
+    correctColor[led].b = color[led].b * percent;
+    break;
+
+  case RBG:
+
+    correctColor[led].r = color[led].r * percent;
+    correctColor[led].b = color[led].g * percent;
+    correctColor[led].g = color[led].b * percent;
+    break;
+    
+  case GRB:
+
+    correctColor[led].g = color[led].r * percent;
+    correctColor[led].r = color[led].g * percent;
+    correctColor[led].b = color[led].b * percent;
+    break;
+
+  case GBR:
+
+    correctColor[led].g = color[led].r * percent;
+    correctColor[led].b = color[led].g * percent;
+    correctColor[led].r = color[led].b * percent;
+    break;
+
+  case BGR:
+
+    correctColor[led].b = color[led].r * percent;
+    correctColor[led].g = color[led].g * percent;
+    correctColor[led].r = color[led].b * percent;
+    break;
+    
+  case BRG:
+
+    correctColor[led].b = color[led].r * percent;
+    correctColor[led].r = color[led].g * percent;
+    correctColor[led].g = color[led].b * percent;
+    break;
+  
+  default:
+    correctColor[led].r = color[led].r * percent;
+    correctColor[led].g = color[led].g * percent;
+    correctColor[led].b = color[led].b * percent;
+    break;
+  }
+
+  
 
   return percent;
 }
@@ -448,9 +497,10 @@ cRGB MyWS2812B ::getColor(uint8_t led) {
 
 void MyWS2812B ::setBrightness(uint8_t n) {
 
-  for (uint16_t i = 0; i < maxNumberOfLeds; i++)
+  for (uint16_t led = 0; led < maxNumberOfLeds; led++)
   {
-    brightness[i] = n;
+    brightness[led] = n;
+    calculateBrightness(n, led);
   }
   
   
@@ -461,5 +511,6 @@ void MyWS2812B ::setBrightness(uint8_t n) {
 void MyWS2812B ::setBrightness(uint8_t n, uint8_t led) {
 
   brightness[led] = n;
+  calculateBrightness(n, led);
 }
 

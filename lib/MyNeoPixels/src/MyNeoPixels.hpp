@@ -46,6 +46,15 @@ enum colorModes {
 
 };
 
+enum rgbCode {
+    RGB,
+    RBG,
+    GRB,
+    GBR,
+    BGR,
+    BRG
+};
+
 
 
 
@@ -78,7 +87,8 @@ class MyWS2812B {
         uint8_t* registerPtrMemAddrPort;
         volatile uint8_t* registerPtrDDR; // Data port 
         uint8_t pin;  // Data out pin
-        uint8_t maxNumberOfLeds {255};
+        uint8_t maxNumberOfLeds;
+        rgbCode pixelCode;
         cRGB* color;
         cRGB* correctColor;
         uint8_t* brightness;
@@ -100,7 +110,7 @@ class MyWS2812B {
 
         /* CONSTRUCTOR */
 
-        MyWS2812B(volatile uint8_t& DDRx, volatile uint8_t& PORTx, uint8_t* sfrMemAddrPORTx, uint8_t numberPin, uint8_t maxNumberLeds);
+        MyWS2812B(volatile uint8_t& DDRx, volatile uint8_t& PORTx, uint8_t* sfrMemAddrPORTx, uint8_t numberPin, uint8_t maxNumberLeds = 255, rgbCode code = GRB);
 
 
         /* DESTRUCTOR */
