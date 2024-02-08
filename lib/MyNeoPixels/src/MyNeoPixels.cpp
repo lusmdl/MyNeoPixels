@@ -315,6 +315,9 @@ w_nop16
   }
   
   SREG=sreg_prev;
+#ifdef interrupt_is_disabled
+  sei();  // enable after the magic happend
+#endif  
 }
 
 
@@ -423,7 +426,7 @@ void MyWS2812B ::clearColor(uint8_t led) {
 */
 double MyWS2812B ::calculateBrightness (uint8_t bright, uint8_t led) {
 
-  double percent = dimCurve[bright] / 255;
+  double percent = static_cast<double>(dimCurve[bright]) / 255;
 
   correctColor[led].r = color[led].r * percent;
   correctColor[led].g = color[led].g * percent;
