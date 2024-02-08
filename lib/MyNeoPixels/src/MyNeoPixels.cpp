@@ -369,6 +369,29 @@ void MyWS2812B ::setColor(uint8_t led, colorModes mode) {
 }
 
 
+void MyWS2812B ::setColor(colorModes mode) {
+
+  for (int i = 0; i < maxNumberOfLeds; i++)
+  {
+    setColor(i, mode);
+  }
+  
+
+}
+
+
+
+void MyWS2812B ::setColor(uint8_t r, uint8_t g, uint8_t b) {
+
+  for (int i = 0; i < maxNumberOfLeds; i++)
+  {
+    setColor(i, r,g,b);
+  }
+  
+
+}
+
+
 
 /**
  * Sends the color data for all LEDs to the WS2812B strip.

@@ -121,7 +121,9 @@ class MyWS2812B {
         /* SETTER */
 
         void setColor(uint8_t led, uint8_t r, uint8_t g, uint8_t b);
+        void setColor(uint8_t r, uint8_t g, uint8_t b);
         void setColor(uint8_t led, colorModes mode);
+        void setColor(colorModes mode);
         void setBrightness(uint8_t n);
         void setBrightness(uint8_t n, uint8_t led);
         void show();
