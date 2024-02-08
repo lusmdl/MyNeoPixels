@@ -35,8 +35,9 @@ MyWS2812B leds(DDRD, PORTD, (uint8_t*) _SFR_MEM_ADDR(PORTD), PD6, 3);
 3. Use the provided functions to control the LED color:
 ```cpp
 leds.clearColor();
-leds.show();
+leds.setBrightness(255);
 leds.setColor(1, 255,0,0);
+leds.show();
 ```
 
 ## PlatformIO
