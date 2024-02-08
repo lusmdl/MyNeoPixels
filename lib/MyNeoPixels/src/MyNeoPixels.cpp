@@ -422,19 +422,85 @@ void MyWS2812B ::setColor(uint8_t led, uint8_t r, uint8_t g, uint8_t b) {
  * @brief Sets the color of a specific LED in a MyWS2812B strip based on the given mode.
  * 
  * @param led The index of the LED to set the color for
- * @param mode The color mode to apply (warm white or default)
+ * @param mode The color mode to apply. Possible modes are:
+ *        - red
+ *        - blue
+ *        - yellow
+ *        - green
+ *        - orange
+ *        - purple
+ *        - pink
+ *        - brown
+ *        - black
+ *        - white
+ *        - warmWhite
  * 
  * @warning This method may produce unexpected results and is considered unsafe in certain scenarios.
  * @note If an unsupported mode is provided, the default color (255, 255, 255) will be used.
  * 
  * @example 
- * MyWS2812B strip;
- * strip.setColor(2, warmWhite);
+ * MyWS2812B leds;
+ * leds.setColor(2, warmWhite);
  */
 void MyWS2812B ::setColor(uint8_t led, colorModes mode) {
 
+  /*
+  Red: 255, 0, 0
+  Blue: 0, 0, 255
+  Yellow: 255, 255, 0
+  Green: 0, 255, 0
+  Orange: 255, 165, 0
+  Purple: 128, 0, 128
+  Pink: 255, 192, 203
+  Brown: 139, 69, 19
+  Black: 0, 0, 0
+  White: 255, 255, 255
+  Warm White: 255, 75, 15
+  */
+
   switch (mode)
   {
+
+  case red:
+    color[led] = {255, 0, 0};
+    break;
+
+  case blue:
+    color[led] = {0, 0, 255};
+    break;
+
+  case yellow:
+    color[led] = {255, 255, 0};
+    break;
+
+  case green:
+    color[led] = {0, 255, 0};
+    break;
+
+  case orange:
+    color[led] = {255, 165, 0};
+    break;
+
+  case purple:
+    color[led] = {128, 0, 128};
+    break;
+
+  case pink:
+    color[led] = {255, 192, 203};
+    break;
+
+  case brown:
+    color[led] = {139, 69, 19};
+    break;
+
+  case black:
+    color[led] = {0, 0, 0};
+    break;
+  
+  case white:
+    color[led] = {255, 255, 255};
+    break;
+
   case warmWhite:
     color[led] = {255, 75, 15};
     break;
