@@ -1,65 +1,72 @@
 #ifndef MYNEOPIXELS_HPP
 #define MYNEOPIXELS_HPP
 
-/* AVR */
+// AVR
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
 
+// MACROS
 
-/* MY */
-
-
-
-
-/* C/C++ */
+#define TIME_RESET 50 // WS2812 and clones only need 50 µs
 
 
+// ENUMS
 
-
-
-/* MACROS */
-
-
-
-/* USER DEFINED TYPES */
-
-/*
- *  Structure of the LED array
- *
- * cRGB:     RGB  for WS2812S/B/C/D, SK6812, SK6812Mini, SK6812WWA, APA104, APA106
- * cRGBW:    RGBW for SK6812RGBW
- */
-struct cRGB  { uint8_t g; uint8_t r; uint8_t b; }; // RGB  for WS2812S/B/C/D, SK6812, SK6812Mini, SK6812WWA, APA104, APA106
-struct cRGBW { uint8_t g; uint8_t r; uint8_t b; uint8_t w;}; // RGBW for SK6812RGBW
-
-
-
-
-
-
-/* ENUMS */
-
-enum colorModes {
+/**
+ * 
+ * @note 
+    RED,
+    BLUE,
+    YELLOW,
+    GREEN,
+    ORANGE,
+    PURPLE,
+    PINK,
+    BROWN,
+    BLACK,
+    WHITE,   
+    WARM_WHITE
+ * 
+ * 
+ * 
+*/
+enum enum_colormodes {
     
-    red,
-    blue,
-    yellow,
-    green,
-    orange,
-    purple,
-    pink,
-    brown,
-    black,
-    white,   
-    warmWhite
+    RED,
+    BLUE,
+    YELLOW,
+    GREEN,
+    ORANGE,
+    PURPLE,
+    PINK,
+    BROWN,
+    BLACK,
+    WHITE,   
+    WARM_WHITE
 
 };
 
 
-
-enum rgbCode {
+/**
+ * 
+ * 
+ * 
+ * @note
+    RGB,
+    RBG,
+    GRB,
+    GBR,
+    BGR,
+    BRG
+ * 
+ * 
+ * 
+ * 
+ * 
+*/
+enum enum_colormapping {
     RGB,
     RBG,
     GRB,
@@ -69,50 +76,102 @@ enum rgbCode {
 };
 
 
+// Plain Old Data
+//
+// Für Datenübertragung zwischen Softwarekomponenten
+// 
+// Regeln:
+// - Einfache Datenstrukturen
+// - Nur Daten, keine Methoden
+// - kompakt und leichtgewichtig
+// - portabel
+// - unveränderlich
+
+/*
+ *  Structure of the LED array
+ *
+ * pod_rgb:     RGB  for WS2812S/B/C/D, SK6812, SK6812Mini, SK6812WWA, APA104, APA106
+ */
+struct pod_rgb  { 
+
+    uint8_t g; 
+    uint8_t r; 
+    uint8_t b; 
+};
+
+/*
+ *  Structure of the LED array
+ *
+ * pod_rgbw:    RGBW for SK6812RGBW
+ */
+struct pod_rgbw { 
+    
+    uint8_t g; 
+    uint8_t r; 
+    uint8_t b; 
+    uint8_t w;
+};
 
 
 
+// CLASSES 
 
+// BASIC CLASS
 
+/**
+ * 
+ * 
+ * 
+ * 
+*/
+class MyNeoPixels {
 
+    protected:
 
+        // MEMBER
 
+        // CONSTANTS
 
+        static const uint8_t dimCurve[256]; // Brightness values, adapted to the actual brightness curve from 0 to 255
+};
 
-
-
-
-/* CLASSES */
-
-class MyWS2812B {
+class MyWS2812B : public MyNeoPixels {
 
 
     private:
 
-        /* CONSTANTS */
+        // MEMBER
 
-        #define TIME_RESET 50 // WS2812 and clones only need 50 µs
-        static const uint8_t dimCurve[256]; // Brightness values, adapted to the actual brightness curve from 0 to 255
+        // Registers
 
-        /* DATA */
+        // Data pin Data Direction Register 
+        volatile uint8_t* ptrDataDirectionRegister_; 
 
-        volatile uint8_t* registerPtrPORT; // Data port 
-        uint8_t* registerPtrMemAddrPort;
-        volatile uint8_t* registerPtrDDR; // Data port 
-        uint8_t pin;  // Data out pin
-        uint8_t maxNumberOfLeds;
-        rgbCode pixelCode;
-        cRGB* color;
-        cRGB* correctColor;
-        uint8_t* brightness;
+        // Data pin PORT register
+        volatile uint8_t* ptrPortRegister_;
+
+        // here comes the information for the poiter
+        uint8_t* ptrPortRegisterMemAddr_;
+
+        // Data pin Number (register bit)
+        uint8_t pin_;
+
+        // LED data
+
+        enum_colormapping colorMapping_;
+        pod_rgb* colorMapped_;
+
+        uint8_t maxNumberOfLeds_;
+        pod_rgb* color_;
+        uint8_t* brightness_;
 
 
-        /* SETTER */
+        // SETTER
 
-        void inline ws2812_setleds_pin(struct cRGB *ledarray, uint16_t leds, uint8_t pinmask);
-        void ws2812_sendarray(uint8_t *data,uint16_t datlen);
-        void inline ws2812_sendarray_mask(uint8_t *data,uint16_t datlen,uint8_t maskhi);
-        void inline ws2812_setleds (struct cRGB  *ledArray, uint16_t numberOfLeds);
+        void inline setLedsPin(pod_rgb *led_array, uint16_t leds, uint8_t pin_mask);
+        void sendArray(uint8_t *data, uint16_t data_len);
+        void inline sendArrayMask(uint8_t *data, uint16_t data_len, uint8_t maskhi);
+        void inline setLeds (pod_rgb  *led_array, uint16_t number_of_leds);
         double calculateBrightness (uint8_t bright, uint8_t led);
 
 
@@ -121,35 +180,39 @@ class MyWS2812B {
 
     public:
 
-        /* CONSTRUCTOR */
+        // CONSTRUCTOR
 
-        MyWS2812B(volatile uint8_t& DDRx, volatile uint8_t& PORTx, uint8_t* sfrMemAddrPORTx, uint8_t numberPin, uint8_t maxNumberLeds = 255, rgbCode code = GRB);
+        MyWS2812B(volatile uint8_t& ddrx, volatile uint8_t& portx, uint8_t* sfr_mem_addr_portx, uint8_t pin_number, uint8_t max_number_of_leds = 255, enum_colormapping color_mapping = GRB);
 
 
-        /* DESTRUCTOR */
+        // DESTRUCTOR
 
         ~MyWS2812B();
 
 
-        /* SETTER */
+        // SETTER
+
+        // FOR ALL LEDS
+
+        void setColor(uint8_t r, uint8_t g, uint8_t b);
+        void setColor(enum_colormodes mode);
+        void setBrightness(uint8_t n);
+        void clearColor();
+
+        // FOR ONE SPECIFIC LED
 
         void setColor(uint8_t led, uint8_t r, uint8_t g, uint8_t b);
-        void setColor(uint8_t r, uint8_t g, uint8_t b);
-        void setColor(uint8_t led, colorModes mode);
-        void setColor(colorModes mode);
-        void setBrightness(uint8_t n);
+        void setColor(uint8_t led, enum_colormodes mode);
         void setBrightness(uint8_t n, uint8_t led);
-        void show();
-        void clearColor();
         void clearColor(uint8_t led);
 
-        /* GETTER */
+        // EXECUTE
 
-        cRGB getColor(uint8_t led);
+        void show();
+
+        // GETTER
+
+        pod_rgb getColor(uint8_t led);
         uint8_t getMaxNumPixels();
- 
 };
-
 #endif
-
-
