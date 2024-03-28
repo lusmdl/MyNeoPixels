@@ -13,13 +13,13 @@ class MyWS2812B : public MyNeoPixels {
         // Registers
 
         // Data pin Data Direction Register 
-        volatile uint8_t* ptrDataDirectionRegister_; 
+        volatile uint8_t *ptrDataDirectionRegister_; 
 
         // Data pin PORT register
-        volatile uint8_t* ptrPortRegister_;
+        volatile uint8_t *ptrPortRegister_;
 
         // here comes the information for the poiter
-        uint8_t* ptrPortRegisterMemAddr_;
+        uint8_t *ptrPortRegisterMemAddr_;
 
         // Data pin Number (register bit)
         uint8_t pin_;
@@ -27,9 +27,9 @@ class MyWS2812B : public MyNeoPixels {
         // LED data
 
         enum_colormapping colorMapping_;
-        pod_rgb* colorMapped_;
+        pod_rgb *colorMapped_;
 
-        pod_rgb* color_;
+        pod_rgb *color_;
         //uint8_t maxNumberOfLeds_;
         //uint8_t* brightness_;
         pod_leddata data_;
@@ -50,7 +50,7 @@ class MyWS2812B : public MyNeoPixels {
 
         // CONSTRUCTOR
 
-        MyWS2812B(volatile uint8_t& ddrx, volatile uint8_t& portx, uint8_t* sfr_mem_addr_portx, uint8_t pin_number, uint8_t max_number_of_leds = 255, enum_colormapping color_mapping = GRB);
+        MyWS2812B(volatile uint8_t &ddrx, volatile uint8_t &portx, uint8_t *sfr_mem_addr_portx, uint8_t pin_number, uint8_t max_number_of_leds = 255, enum_colormapping color_mapping = GRB);
 
 
         // DESTRUCTOR
@@ -64,7 +64,7 @@ class MyWS2812B : public MyNeoPixels {
 
         void setColor(uint8_t led, uint8_t r, uint8_t g, uint8_t b);
         void setColor(uint8_t led, enum_colormodes mode);
-        void setColor(uint8_t led, pod_rgb& color);
+        void setColor(uint8_t led, pod_rgb &color);
         void setBrightness(uint8_t n, uint8_t led);
         void clearColor(uint8_t led);
 
@@ -72,7 +72,7 @@ class MyWS2812B : public MyNeoPixels {
 
         void setColor(uint8_t r, uint8_t g, uint8_t b);
         void setColor(enum_colormodes mode);
-        void setColor(pod_rgb& color);
+        void setColor(pod_rgb &color);
         void setBrightness(uint8_t n);
         void clearColor();
         

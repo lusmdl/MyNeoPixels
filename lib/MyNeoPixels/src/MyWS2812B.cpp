@@ -2,7 +2,7 @@
 
 
 ///////////////////////////////////////////////////////////////////////
-/* BELOW THIS SECTION IS THE MAGIC */
+// BELOW THIS SECTION IS THE MAGIC
 ///////////////////////////////////////////////////////////////////////
 
 
@@ -276,7 +276,7 @@ w_nop16
 
 
 ///////////////////////////////////////////////////////////////////////
-/* ABOVE THIS SECTION IS THE MAGIC */
+// ABOVE THIS SECTION IS THE MAGIC
 ///////////////////////////////////////////////////////////////////////
 
 
@@ -298,7 +298,7 @@ w_nop16
  */
 double MyWS2812B ::calculateBrightness (uint8_t bright, uint8_t led) {
 
-  double percent = static_cast<double>(dimCurve[bright]) / 255;
+  double percent = static_cast<double>(DIM_CURVE[bright]) / 255;
 
   switch (colorMapping_) {
 
@@ -377,10 +377,10 @@ double MyWS2812B ::calculateBrightness (uint8_t bright, uint8_t led) {
  * @example 
  * MyWS2812B leds(PORTA, &PORTA, DDRB, 3);
  */
-MyWS2812B ::MyWS2812B(volatile uint8_t& ddrx, volatile uint8_t& portx, uint8_t* sfr_mem_addr_portx, uint8_t pin_number, uint8_t max_number_of_leds, enum_colormapping color_mapping) : 
+MyWS2812B ::MyWS2812B(volatile uint8_t &ddrx, volatile uint8_t &portx, uint8_t *sfr_mem_addr_portx, uint8_t pin_number, uint8_t max_number_of_leds, enum_colormapping color_mapping) : 
   ptrDataDirectionRegister_ (&ddrx), 
   ptrPortRegister_ (&portx), 
-  ptrPortRegisterMemAddr_(sfr_mem_addr_portx), 
+  ptrPortRegisterMemAddr_ (sfr_mem_addr_portx), 
   pin_ (pin_number),
   colorMapping_ (color_mapping), 
   data_ {max_number_of_leds, new uint8_t[max_number_of_leds]},
@@ -448,7 +448,6 @@ void MyWS2812B ::setColor(uint8_t led, uint8_t r, uint8_t g, uint8_t b) {
   color_[led] = {r, g, b};
 
   calculateBrightness(data_.brightness[led], led);
-
 }
 
 
@@ -556,7 +555,15 @@ void MyWS2812B ::setColor(uint8_t led, enum_colormodes mode) {
   calculateBrightness(data_.brightness[led], led);
 }
 
-void MyWS2812B::setColor(uint8_t led, pod_rgb& color) {
+
+/**
+ * 
+ * @brief Sets the color of a specific LED.
+ * 
+ * 
+ * 
+*/
+void MyWS2812B::setColor(uint8_t led, pod_rgb &color) {
 
   setColor(led, color.r, color.g, color.b);
 }
@@ -647,9 +654,8 @@ void MyWS2812B ::setColor(enum_colormodes mode) {
 
     setColor(i, mode);
   }
-  
-
 }
+
 
 /**
  * 

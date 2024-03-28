@@ -2,6 +2,7 @@
 #define MYNEOPIXELS_HPP
 
 // AVR
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -15,6 +16,7 @@
 // ENUMS
 
 /**
+ * @brief Predesigned color, where you can choose from
  * 
  * @note 
     RED,
@@ -50,7 +52,7 @@ enum enum_colormodes {
 
 
 /**
- * 
+ * @brief mapping of the color values
  * 
  * 
  * @note
@@ -60,10 +62,6 @@ enum enum_colormodes {
     GBR,
     BGR,
     BRG
- * 
- * 
- * 
- * 
  * 
 */
 enum enum_colormapping {
@@ -87,10 +85,10 @@ enum enum_colormapping {
 // - portabel
 // - unveränderlich
 
-/*
- *  Structure of the LED array
+/**
+ * @brief Structure of the LED array
  *
- * pod_rgb:     RGB  for WS2812S/B/C/D, SK6812, SK6812Mini, SK6812WWA, APA104, APA106
+ * @note RGB  for WS2812S/B/C/D, SK6812, SK6812Mini, SK6812WWA, APA104, APA106
  */
 struct pod_rgb  { 
 
@@ -99,10 +97,10 @@ struct pod_rgb  {
     uint8_t b; 
 };
 
-/*
- *  Structure of the LED array
+/**
+ * @brief Structure of the LED array
  *
- * pod_rgbw:    RGBW for SK6812RGBW
+ * @note RGBW for SK6812RGBW
  */
 struct pod_rgbw { 
     
@@ -113,13 +111,15 @@ struct pod_rgbw {
 };
 
 /**
+ * @brief this structure contains all informations about the led array
  * 
+ * @warning the color values are in a diffrent container
  * 
 */
 struct pod_leddata {
 
     uint8_t maxNumberOfLeds;
-    uint8_t* brightness;
+    uint8_t *brightness;
 };
 
 
@@ -129,7 +129,10 @@ struct pod_leddata {
 // BASIC CLASS
 
 /**
+ * @brief the basic class for all kind of LED Strings
  * 
+ * 
+ * @note contains common data and methods
  * 
  * 
  * 
@@ -142,7 +145,8 @@ class MyNeoPixels {
 
         // CONSTANTS
 
-        static const uint8_t dimCurve[256]; // Brightness values, adapted to the actual brightness curve from 0 to 255
+        // Brightness values, adapted to the actual brightness curve from 0 to 255
+        static const uint8_t DIM_CURVE[256];
 };
 
 // NEO PIXEL TYPES
