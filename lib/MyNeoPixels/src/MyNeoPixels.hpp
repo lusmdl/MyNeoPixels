@@ -112,6 +112,16 @@ struct pod_rgbw {
     uint8_t w;
 };
 
+/**
+ * 
+ * 
+*/
+struct pod_leddata {
+
+    uint8_t maxNumberOfLeds;
+    uint8_t* brightness;
+};
+
 
 
 // CLASSES 

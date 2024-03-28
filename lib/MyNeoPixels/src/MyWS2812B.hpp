@@ -29,10 +29,10 @@ class MyWS2812B : public MyNeoPixels {
         enum_colormapping colorMapping_;
         pod_rgb* colorMapped_;
 
-        uint8_t maxNumberOfLeds_;
         pod_rgb* color_;
-        uint8_t* brightness_;
-
+        //uint8_t maxNumberOfLeds_;
+        //uint8_t* brightness_;
+        pod_leddata data_;
 
         // SETTER
 
@@ -60,20 +60,22 @@ class MyWS2812B : public MyNeoPixels {
 
         // SETTER
 
-        // FOR ALL LEDS
-
-        void setColor(uint8_t r, uint8_t g, uint8_t b);
-        void setColor(enum_colormodes mode);
-        void setBrightness(uint8_t n);
-        void clearColor();
-
         // FOR ONE SPECIFIC LED
 
         void setColor(uint8_t led, uint8_t r, uint8_t g, uint8_t b);
         void setColor(uint8_t led, enum_colormodes mode);
+        void setColor(uint8_t led, pod_rgb& color);
         void setBrightness(uint8_t n, uint8_t led);
         void clearColor(uint8_t led);
 
+        // FOR ALL LEDS
+
+        void setColor(uint8_t r, uint8_t g, uint8_t b);
+        void setColor(enum_colormodes mode);
+        void setColor(pod_rgb& color);
+        void setBrightness(uint8_t n);
+        void clearColor();
+        
         // EXECUTE
 
         void show();
@@ -81,6 +83,6 @@ class MyWS2812B : public MyNeoPixels {
         // GETTER
 
         pod_rgb getColor(uint8_t led);
-        uint8_t getMaxNumPixels();
+        pod_leddata getLedsData();
 };
 #endif // MYWS2812B_HPP
