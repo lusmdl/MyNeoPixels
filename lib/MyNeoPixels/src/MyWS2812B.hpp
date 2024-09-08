@@ -82,7 +82,8 @@ class MyWS2812B : public MyNeoPixels {
 
         // GETTER
 
-        pod_rgb getColor(uint8_t led);
         pod_leddata getLedsData();
+        pod_rgb getColor(uint8_t led);
+        uint8_t getBrightness(uint8_t led);
 };
 #endif // MYWS2812B_HPP
