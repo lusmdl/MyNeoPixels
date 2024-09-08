@@ -762,8 +762,3 @@ pod_leddata MyWS2812B ::getLedsData() {
   
   return data_;
 }
-
-uint8_t MyWS2812B::getBrightness(uint8_t led)
-{
-  return data_.brightness[led];
-}
