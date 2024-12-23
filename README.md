@@ -72,10 +72,21 @@ Feel free to modify this `ini` file to suit your configuration. I use the Atmega
 
 I specifically use the WS2812B LED strips.
 
+## Documentation
+The detailed documentation for this project can be found under [doc/software/html/index.html](doc/software/html/index.html)
+
 ## Contributing
 
-If you would like to contribute to this library, please fork the repository and submit a pull request with your changes. Ensure to write tests for any new features added.
+We welcome contributions from the community!
+
+First, read the [general contributing conventions for projects from me](CONTRIBUTING.md).
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Commit your changes (`git commit -am 'Add new feature'`).
+4. Push to the branch (`git push origin feature-branch`).
+5. Create a new Pull Request.
 
 ## License
 
-This library is released under the MIT license. See the [LICENSE](LICENSE) file for more information.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
